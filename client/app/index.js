@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, TextInput, Alert } from 'react-native'
-import { API_URL } from '../config/constants'
 import api  from '../config/api'
 import { Button } from '../src/components/Button'
 import { useRouter } from 'expo-router'
+import { useUserContext } from '../contexts/UserContext'
 
-export default function App() {
+
+export default function IndexPage() {
+
     const [message, setMessage] = useState('');
     const [postResponse, setPostResponse] = useState('');
     const [inputText, setInputText] = useState('');
+    const { setName, setEstado } = useUserContext()
 
-    const BASE_URL = API_URL
     const router = useRouter()
 
     // Consumir a rota GET ao carregar o app
@@ -30,6 +32,10 @@ export default function App() {
                 let text
 
                 if (data.msg == true){
+
+                    setEstado('testeeeee')
+                    setName(inputText)
+
                     router.push('/menu')
 
                 }else{
@@ -42,32 +48,23 @@ export default function App() {
             .catch(error => console.error('Error posting data:', error));
     };
 
-    const getMsgColor = (msg) => {
-        
-        if (msg == 'Acesso Negado'){
-            return 'red'
-        }
-        else if (msg == 'Acesso Permitido'){
-            return 'green'
-        }
-    }
-
     return (
-        <View style={styles.container}>
-            <Text>Recebeu: {message}</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Digite Seu Nome"
-                value={inputText}
-                onChangeText={setInputText}
-            />
-            
-            <Button title='Entrar' onPress={sendData} />
+        // <UserProvider>
+            <View style={styles.container}>
+                <Text>Recebeu: {message}</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Digite Seu Nome"
+                    value={inputText}
+                    onChangeText={setInputText}
+                />
+                
+                <Button title='Entrar' onPress={sendData} />
 
-            {postResponse ? <Text style={ styles.msg }>{postResponse}</Text> : null}
-            
-            
-        </View>
+                {postResponse ? <Text style={ styles.msg }>{postResponse}</Text> : null}
+                
+            </View>
+        // </UserProvider>
     );
 }
 
@@ -96,4 +93,5 @@ const styles = StyleSheet.create({
         color: 'red',
         fontWeight: 'bold'
     }
+    
 });

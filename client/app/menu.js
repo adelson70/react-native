@@ -1,30 +1,33 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BackHandler, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router'
+import { useUserContext } from '../contexts/UserContext';
 
 export default function Menu() {
 
     const router = useRouter()
+    const { name, estado } = useUserContext()
 
-    const goToMenu = () => {
-        router.replace('/menu')
-    }
-
+    console.log(name)
+    
+    
     useEffect(() => {
+
         const backAction = () => {
             return true
         }
-
+        
         BackHandler.addEventListener('hardwareBackPress', backAction)
-
+        
         return () => {
             BackHandler.removeEventListener('hardwareBackPress', backAction)
         }
-    }, [])
+    }, [router.query])
 
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Seja Bem-vindo!</Text>
+            <Text style={styles.text}>Seja Bem-vindo {name}!</Text>
+            <Text style={styles.text}>{estado}</Text>
         </View>
     );
 }
