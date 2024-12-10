@@ -12,6 +12,9 @@ def registerMain(app):
     def post_data():
         data = request.json  # Recebe os dados enviados do React Native
         nome = data['nome']
+        senha = data['senha']
+
+        print(nome,senha)
         
         respo = verificarNome(nome)
 

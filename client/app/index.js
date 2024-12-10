@@ -10,36 +10,42 @@ export default function IndexPage() {
 
     const [message, setMessage] = useState('');
     const [postResponse, setPostResponse] = useState('');
-    const [inputText, setInputText] = useState('');
+    
+    const [inputNome, setInputNome] = useState('');
+    const [inputSenha, setInputSenha] = useState('');
+
     const { setName, setEstado } = useUserContext()
 
     const router = useRouter()
 
     // Consumir a rota GET ao carregar o app
-    useEffect(() => {
-        api.get("/api/data")
-            .then(response => {
-                setMessage(response.data.message);
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    }, []);
+    // useEffect(() => {
+    //     api.get("/api/data")
+    //         .then(response => {
+    //             setMessage(response.data.message);
+    //         })
+    //         .catch(error => console.error('Error fetching data:', error));
+    // }, []);
 
     // Enviar dados para a rota POST
     const sendData = () => {
-        api.post("/api/post", { nome: inputText })
+        api.post("/api/post", { 
+            nome: inputNome,
+            senha: inputSenha
+         })
             .then(response => {
                 let data = response.data
                 let text
 
                 if (data.msg == true){
 
-                    setEstado('testeeeee')
-                    setName(inputText)
+                    setEstado('da hora')
+                    setName(inputNome)
 
                     router.push('/menu')
 
                 }else{
-                    text = 'Acesso Negado'
+                    Alert.alert('Erro','Credenciais Invalidas')
                 }
 
                 setPostResponse(text);
@@ -49,22 +55,29 @@ export default function IndexPage() {
     };
 
     return (
-        // <UserProvider>
             <View style={styles.container}>
-                <Text>Recebeu: {message}</Text>
+                <Text style={styles.label}> Nome </Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Digite Seu Nome"
-                    value={inputText}
-                    onChangeText={setInputText}
+                    value={inputNome}
+                    onChangeText={setInputNome}
                 />
-                
-                <Button title='Entrar' onPress={sendData} />
 
-                {postResponse ? <Text style={ styles.msg }>{postResponse}</Text> : null}
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}> Senha </Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Digite Sua Senha"
+                        value={inputSenha}
+                        onChangeText={setInputSenha}
+                        secureTextEntry={true}
+                    />
+                </View>
+
+                <Button title='Entrar' onPress={sendData} />
                 
             </View>
-        // </UserProvider>
     );
 }
 
@@ -77,13 +90,16 @@ const styles = StyleSheet.create({
     },
 
     input: {
-        height: 40,
-        borderColor: 'gray',
+        height: 50,
+        borderColor: '#003366',
         borderWidth: 1,
-        width: '100%',
         marginBottom: 10,
         paddingHorizontal: 8,
-        textAlign: 'center'
+        textAlign: 'center',
+        width: '70%',
+        color: '#003366',
+        marginBottom: 20,
+        borderRadius: 6
     },
 
     msg: {
@@ -92,6 +108,16 @@ const styles = StyleSheet.create({
         marginTop: 20,
         color: 'red',
         fontWeight: 'bold'
+    },
+
+    label:{
+        paddingVertical: 0,
+        color: '#003366'
+    },
+
+    inputContainer:{
+        flexDirection: 'row',
+        alignItems: 'center'
     }
     
 });

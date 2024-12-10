@@ -6,10 +6,7 @@ import { useUserContext } from '../contexts/UserContext';
 export default function Menu() {
 
     const router = useRouter()
-    const { name, estado } = useUserContext()
-
-    console.log(name)
-    
+    const { name, estado } = useUserContext()    
     
     useEffect(() => {
 
@@ -38,10 +35,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
+        backgroundColor: '#FFF8DC'
     },
     text: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: 'green',
+        color: '#003366',
     },
 });
